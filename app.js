@@ -13,6 +13,10 @@ const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
 const auth = require("./auth");
 
+// body parser configuration
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // execute database connection
 dbConnect();
 
@@ -34,10 +38,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-
-// body parser configuration
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (request, response, next) => {
   response.json({ message: "Hey! This is your server response!" });
