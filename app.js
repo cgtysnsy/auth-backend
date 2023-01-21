@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+app.use(express.json());
+
 // require database connection
 const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
@@ -38,6 +40,7 @@ app.get("/", (request, response, next) => {
 // register endpoint
 app.post("/register", (request, response) => {
   // hash the password
+
   bcrypt
     .hash(request.body.password, 10)
     .then((hashedPassword) => {
@@ -50,15 +53,16 @@ app.post("/register", (request, response) => {
       // save the new user
       user
         .save()
-        // return success if the new user is added to the database successfully
         .then((result) => {
+          // return success if the new user is added to the database successfully
           response.status(201).send({
             message: "User Created Successfully",
             result,
           });
         })
-        // catch erroe if the new user wasn't added successfully to the database
+
         .catch((error) => {
+          // catch erroe if the new user wasn't added successfully to the database
           response.status(500).send({
             message: "Error creating user",
             error,
@@ -77,6 +81,7 @@ app.post("/register", (request, response) => {
 // login endpoint
 app.post("/login", (request, response) => {
   // check if email exists
+  // check if email exists
   User.findOne({ email: request.body.email })
 
     // if email exists
@@ -87,9 +92,8 @@ app.post("/login", (request, response) => {
 
         // if the passwords match
         .then((passwordCheck) => {
-
           // check if password matches
-          if(!passwordCheck) {
+          if (!passwordCheck) {
             return response.status(400).send({
               message: "Passwords does not match",
               error,
