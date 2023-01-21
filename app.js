@@ -3,8 +3,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
 
 app.use(express.json());
+app.use(cors());
 
 // require database connection
 const dbConnect = require("./db/dbConnect");
@@ -14,7 +16,8 @@ const auth = require("./auth");
 // execute database connection
 dbConnect();
 
-// Curb Cores Error by adding a header here
+//Curb Cores Error by adding a header here
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -86,6 +89,7 @@ app.post("/login", (request, response) => {
 
     // if email exists
     .then((user) => {
+      console.log("🚀 ~ file: app.js:89 ~ .then ~ user", user);
       // compare the password entered and the hashed password found
       bcrypt
         .compare(request.body.password, user.password)
